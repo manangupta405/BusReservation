@@ -1,0 +1,58 @@
+CREATE DATABASE GOBUS;
+USE GOBUS;
+CREATE TABLE Users ( UserName VARCHAR(25) PRIMARY KEY ,
+		     Password VARCHAR(20) NOT NULL , 
+                     FirstName VARCHAR(20) NOT NULL,
+		     LastName VARCHAR(20) NOT NULL,
+                     Email VARCHAR(100) NOT NULL,
+                     PhoneNo BIGINT(10) NOT NULL
+                   );
+CREATE TABLE BusServices (SP_ID VARCHAR(20) PRIMARY KEY,
+		          SP_Name VARCHAR(40) NOT NULL,
+		          ContactPerson VARCHAR(35) NOT NULL,
+                          ContactNumber BIGINT NOT NULL,
+                          NumberOfBuses INT(5) NOT NULL
+			); 
+CREATE TABLE Bus (BusID VARCHAR(20) PRIMARY KEY,
+		  SP_ID VARCHAR(20) NOT NULL,
+                  CityFrom VARCHAR(20) NOT NULL,
+		  CityTo VARCHAR(20) NOT NULL,
+                  BusType VARCHAR(20) NOT NULL,
+                  Duration TIME NOT NULL,
+		  Departure TIME NOT NULL,
+		  TotalSeats INTEGER(2) NOT NULL,
+		  FOREIGN KEY (SP_ID) REFERENCES BusServices(SP_ID)
+		);
+
+CREATE TABLE Booking (ReferenceNumber BIGINT(15) PRIMARY KEY,
+		      BusID VARCHAR(20) NOT NULL,
+                      JourneyDate DATE NOT NULL,
+                      CityFrom VARCHAR(20) NOT NULL,
+		      CityTo VARCHAR(20) NOT NULL,
+                      Traveller1 VARCHAR(40) NOT NULL,
+		      IDNumber1 BIGINT NOT NULL,
+                      Traveller2 VARCHAR(40) NOT NULL,
+		      IDNumber2 BIGINT NOT NULL,
+		      Traveller3 VARCHAR(40) NOT NULL,
+		      IDNumber3 BIGINT NOT NULL,
+                      Traveller4 VARCHAR(40) NOT NULL,
+		      IDNumber4 BIGINT NOT NULL,
+		      FOREIGN KEY (BusID) REFERENCES Bus(BusID)
+		     );
+CREATE TABLE Seats (BusID VARCHAR(20) NOT NULL,
+		    Date DATE NOT NULL,
+		    AvailableSeats INTEGER(2) NOT NULL,
+		    AssignedSeats VARCHAR(110) NOT NULL,
+		    PRIMARY KEY(BusID, Date),
+		    FOREIGN KEY (BusID) REFERENCES Bus(BusID)
+		   );
+ALTER TABLE booking
+ADD UserName VARCHAR(25) NOT NULL;
+
+ALTER TABLE booking
+ADD FOREIGN KEY (UserName) REFERENCES users(UserName);
+
+ALTER TABLE booking MODIFY COLUMN ReferenceNumber BIGINT(15) auto_increment;
+
+alter table booking add Status Varchar(10) not null;
+
